@@ -15,21 +15,24 @@ Cláusula | Acción
 ### Fórmula CREATE DATABASE | SCHEMA
 
 ```SQL
-CREATE (DATABASE | SCHEMA) [IF-NOT-EXISTS] nombreDB [CHARACTER SET NOMBRE_CHARSET] [COLLATE NOMBRE_REGLAS_COMPARACIÓN];
+CREATE (DATABASE | SCHEMA) [IF-NOT-EXISTS] nombreDB [CHARACTER SET = NOMBRE_CHARSET] [COLLATE = NOMBRE_REGLAS_COMPARACIÓN];
+
+-- En MariaDB existe la cláusula [OR REPLACE], que creará la BBDD si no existe y si existe eliminará la que está creada para crear una nueva.
 ```
 
-Ejemplo en MySQL:
+Ejemplo en MariaDB:
 
 ```SQL
-CREATE DATABASE myDatabase CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+CREATE DATABASE My_Database CHARACTER SET = utf8mb4 COLLATE = utf8_spanish_ci;
 ```
 
-- Con **`CHARACTER SET ...`** le indicamos la codificación de caracteres que vamos a utilizar. **'utf8mb4'** es la implementación de
-UTF-8 utilizada en MySQL. Luego le indicamos qué reglas queremos utilizar para comparar los caracteres unos de otros con **'COLLATE'**.
-**utf8mb4_0900_ai_ci** es la recomendación en MySQL.
-- **[Declaración de la codificación en MySQL](https://dev.mysql.com/doc/refman/8.0/en/charset-database.html)**
-- **[Codificaciones implementadas en MySQL](https://dev.mysql.com/doc/refman/8.0/en/charset-unicode-sets.html)**
-- **[Relación CHARSET-COLLATE en MySQL](https://stackoverflow.com/questions/341273/what-does-character-set-and-collation-mean-exactly#341333)**
+- Crea la BBDD 'My_Database' siempre y cuando no exista.
+- Con **`CHARACTER SET = ...`** le indicamos la codificación de caracteres que vamos a utilizar. **utf8mb4** es la implementación de
+UTF-8 utilizada en MariaDB. Luego le indicamos qué reglas queremos utilizar para comparar los caracteres unos de otros con **`COLLATE`**.
+**utf8_spanish_ci** es el utilizado para comparar caracteres en castellano.
+- **[Creación de BBDD en MariaDB](https://mariadb.com/kb/en/create-database/)**
+- **[Codificaciones implementadas en MariaDB](https://mariadb.com/kb/en/supported-character-sets-and-collations/)**
+- **[Relación CHARSET-COLLATE](https://stackoverflow.com/questions/341273/what-does-character-set-and-collation-mean-exactly#341333)**
 
 Ejemplo en PostgreSQL:
 
@@ -51,11 +54,37 @@ CREATE DATABASE music2
 ### Fórmula CREATE-TABLE
 
 ```SQL
-CREATE TABLE nombreTabla (
-primaryKeyName [Data type] PRIMARY KEY,
-atribUno NCHAR(...),
-atribDos NCHAR(...),
-...
-[CONSTRAINT ...]
+CREATE TABLE [IF-NOT-EXISTS] nombreTabla (
+<atributo1> [DOMINIO] [PRIMARY KEY],
+<atributo2> [DOMINIO] [NOT NULL] [UNIQUE] ...,
+<atributon> [DOMINIO] [NOT NULL] [UNIQUE] ...,
+[CONSTRAINT ...] -- Restricciones
 );
 ```
+
+- Para crear tablas empleamos la cláusula compuesta `CREATE TABLE`, seguida del nombre de la tabla.
+- Una tabla se compone de columnas (atributos) y tuplas de información relacionada con los atributos. Para diferenciar las tuplas unas de otras
+empleamos las claves primarias y éstas las podemos declarar con el identificador `PRIMARY KEY` después de la declaración del dominio o después de
+la declaración de atributos, a modo de restricción.
+- Podemos emplear `NOT NULL` para indicar que no se permite la introducción de valores nulos en una columna en concreto.
+- Empleamos `UNIQUE` para indicar que no queremos que se repitan los valores de una columna.
+- El bloque de código empleado para crear la tabla siempre tiene que acabar en ;.
+
+### Dominios
+
+**Los dominios indican el tipo de datos que queremos emplear para un atributo. El tipo de datos condicionará los posibles valores que una columna podrá tomar.**
+**Algunos de los tipos de datos existentes en MariaDB son los siguientes:**
+
+NUMÉRICOS |
+--------- |
+**INT** (INTEGER) (número entero. Cuando está asignado va desde -2147483648 hasta 2147483647. Cuando no lo está va desde 0 hasta 4294967295) - https://mariadb.com/kb/en/int/|
+**BIGINT** (número entero largo. Cuando está asignado va desde -9223372036854775808 hasta 9223372036854775807. Cuando no lo está va desde 0 hasta 18446744073709551615) - https://mariadb.com/kb/en/bigint/|
+**DECIMAL** (valor decimal. Permite como máximo 65 dígitos en la parte entera y 38 en la mantisa. Si se especifica UNSIGNED no se permitirán los valores negativos) - https://mariadb.com/kb/en/decimal/|
+**FLOAT** (valores de coma flotante. Sus valores pueden ser desde -3.402823466E+38 hasta -1.175494351E-38, 0 y desde 1.175494351E-38 hasta 3.402823466E+38) - https://mariadb.com/kb/en/float/|
+**DOUBLE** (valores de coma flotante de doble precisión. Sus valores pueden ser desde -1.7976931348623157E+308 hasta -2.2250738585072014E-308, 0 y desde 2.2250738585072014E-308 hasta 1.7976931348623157E+308) - https://mariadb.com/kb/en/double/|
+
+---
+
+ CADENAS-CARACTERES|
+ ------------------|
+ **VARCHAR**
