@@ -4,7 +4,7 @@
 
 Cláusula | Acción
 --- | ---
-**`CREATE`** | Nos permite crear una BBDD, una tabla para una BBDD existente, un usuario o un esquema.
+**`CREATE`** | Nos permite crear una BBDD, una tabla para una BBDD existente, un usuario (en DCL) o un esquema.
 **`ALTER`** | Nos permite añadir, eliminar o modificar columnas de una tabla y también añadir o eliminar restricciones.
 **`DROP`** | Elimina una tabla de una BBDD.
 **`TRUNCATE`** | Elimina los datos de una tabla, pero no la tabla en sí.
