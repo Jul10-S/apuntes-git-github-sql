@@ -152,3 +152,87 @@ OTROS|
 - **[Más información sobre tipos de datos en MariaDB](https://mariadb.com/kb/en/data-types/)**
 
 ---
+
+### RESTRICCIONES
+
+El modelo relacional está compuesto de restricciones, reglas que impiden la entrada de datos que no cumplan unos requisitos que les imponemos. Existen reglas inherentes al modelo (regla de integridad referencial, regla de las entidades...) y reglas semánticas:
+
+- **Unicidad:** indica que los valores de un atributo no se pueden repetir. **`UNIQUE`**
+- **Obligatoriedad:** indica que un atributo no admite valores nulos. **`NOT NULL`**
+- **Verificación:** a la hora de hacer una operación de actualización comprueba si se cumplen las condiciones de un predicado en concreto, y si no se cumplen se rechaza la operación. **`CHECK`**
+- **Clave ajena:** esta es una restricción inherente al modelo relacinal que definirá las reglas a seguir al refenciar las claves entre las relaciones de entidades: si una entidad E2 tiene un atributo que es una clave primaria de una entidad E1, el valor de dicho atributo debe concordar con el valor de la clave primaria referenciada de E1 o ser nulo.
+
+A la hora de definir una clave ajena debemos tener en cuenta las consecuencias de las operaciones (borrado y modificación) sobre la tupla de la entidad que contiene la clave que referenciamos.
+Podemos definir las acciones que se llevarán a cabo en caso de que, por ejemplo, se elimine la tupla en concreto que contiene una clave que estamos referenciando desde una entidad E2.
+Estas operaciones son las siguientes:
+
+- **NO ACTION:** el borrado (o la modificación) de una tupla que contiene una clave primaria que estamos referenciando desde otra/s entidad/es no provocará la eliminación de datos en la/s entidad/es que referencia/n.
+- **CASCADE:** el borrado (o la modificación) de una tupla que contiene una clave primaria que estamos referenciando desde otra/s entidad/es provocará el borrado en cascada de las tuplas que contienen la clave referenciada.
+- **SET NULL:** el borrado (o la modificación) de una tupla que contiene una clave primaria que estamos referenciando desde otra/s entidad/es provocará el cambio a valores nulos de todas las tuplas que contienen la clave ajena.
+- **SET DEFAULT:** el borrado (o la modificación) de una tupla que contiene una clave primaria que estamos referenciando desde otra/s entidad/es provocará el cambio a valores por defecto (que previamente hemos definido) en todas las tuplas que contienen la clave ajena.
+
+Ejemplos:
+
+```SQL
+CREATE DOMAIN Tipo_Entero INT(4);
+CREATE DOMAIN Nombre_Valido VARCHAR(20);
+CREATE DOMAIN Apellido_Valido VARCHAR(50);
+
+CREATE TABLE Alumno (
+    id Tipo_Entero PRIMARY KEY,
+    nombre Nombre_Valido NOT NULL,
+    apellidos Apellido_Valido,
+    fecha_nacimiento DATE
+);
+
+CREATE TABLE Profesor (
+    id Tipo_Entero,
+    nombre Nombre_Valido NOT NULL,
+    apellidos Apellido_Valido,
+    fecha_nacimiento DATE,
+    id_alumno Tipo_Entero,  -- Declaramos el atributo id_alumno, que a modo de clave ajena referenciará la clave primaria de cada tupla de la tabla Alumno.
+    PRIMARY KEY (id),       -- Como podemos ver, la restricción de clave primaria se puede poner después de la declaración del atributo que contendrá a éstas claves.
+    UNIQUE (nombre),        -- Lo mismo pasa con UNIQUE, y cualquier otra restricción.
+    FOREIGN KEY (id_alumno) REFERENCES Alumno (id)  -- Indicamos que id_alumno, atributo previamente declarado, referencia a la clave primaria 'id' de la tabla 'Alumno'
+    ON UPDATE CASCADE   -- Indicamos que en caso de modificar la tupla que contiene la clave primaria de un alumno que referenciamos desde la tabla Profesor a modo de clave ajena, los registros también se actualicen en la tabla Profesor. 
+    ON DELETE NO ACTION -- En caso de eliminación en la tabla Alumnos, no eliminar la tupla de la tabla profesor que contiene la clave ajena.
+/*
+También podemos utilizar la palabra clave CONSTRAINT para crear una restricción con un nombre en concreto:
+
+CONSTRAINT <nombre_restricción> PRIMARY KEY (<atributon>) => CONSTRAINT Clave_Primaria PRIMARY KEY (id)
+                                                          => CONSTRAINT Restricción_Unicidad_Nombre UNIQUE (nome)
+
+* El nombramiento de una restricción conllevará una mayor claridad en el código.
+* Hay que tener en cuenta que a la hora de referenciar una clave ajena lo debemos hacer empleando el mismo dominio de la clave primaria que referenciamos. En este caso se crea el atributo id_alumno, que referencia a id de la tabla Alumno y que es de tipo Tipo_Entero, al igual que id.
+
+*/
+);
+```
+
+```SQL
+CREATE DOMAIN Tipo_Entero INT(4);
+CREATE DOMAIN Nombre_Valido VARCHAR(20);
+CREATE DOMAIN Apellido_Valido VARCHAR(50);
+
+CREATE TABLE Alumno (
+    id Tipo_Entero PRIMARY KEY,
+    nombre Nombre_Valido NOT NULL,
+    apellidos Apellido_Valido,
+    fecha_nacimiento DATE,
+    edad INTEGER NOT NULL,
+    CONSTRAINT Comprobar_Edad_Válida CHECK (edad BETWEEN 13 AND 18) -- Comprobamos que la edad del alumno esté comprendida entre 13 y 18 años mediante el predicado como argumento de la restricción de validación - CHECK. Si no se cumple (false), no se permitirá la introducción de la edad.
+
+/*
+
+CHECK permite comprobar que los datos que introducimos en una columna en concreto cumplen una condiciones que le imponemos mediante predicados.
+
+CONSTRAINT <Nombre_Restricción> CHECK (<predicado>) [NOT DEFERRABLE | DEFERRABLE] [INITIALLY IMMEDIATE | INITIALLY DEFERRED]
+
+DEFERRABLE + INITIALLY IMMEDIATE: todas las tuplas son comprobadas al final de la inserción/actualización. 
+DEFERRABLE + INITIALLY DEFERRED: todas las tuplas son comprobadas al final de la transacción.
+NOT DEFERRABLE: cada tupla es comprobada en el momento de la inserción/actualización.
+
+MÁS INFORMACIÓN SOBRE (NOT)DEFERRABLE: https://stackoverflow.com/questions/5300307/not-deferrable-versus-deferrable-initially-immediate#5300418
+*/
+);
+```
