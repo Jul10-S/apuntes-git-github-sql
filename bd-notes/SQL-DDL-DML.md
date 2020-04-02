@@ -54,7 +54,7 @@ CREATE DATABASE music2
 ### Fórmula CREATE-TABLE
 
 ```SQL
-CREATE TABLE [IF-NOT-EXISTS] nombreTabla (
+CREATE TABLE [IF-NOT-EXISTS] Nombre_Tabla (
 <atributo1> [DOMINIO] [PRIMARY KEY],
 <atributo2> [DOMINIO] [NOT NULL] [UNIQUE] ...,
 <atributon> [DOMINIO] [NOT NULL] [UNIQUE] ...,
@@ -62,29 +62,67 @@ CREATE TABLE [IF-NOT-EXISTS] nombreTabla (
 );
 ```
 
-- Para crear tablas empleamos la cláusula compuesta `CREATE TABLE`, seguida del nombre de la tabla.
-- Una tabla se compone de columnas (atributos) y tuplas de información relacionada con los atributos. Para diferenciar las tuplas unas de otras
-empleamos las claves primarias y éstas las podemos declarar con el identificador `PRIMARY KEY` después de la declaración del dominio o después de
-la declaración de atributos, a modo de restricción.
-- Podemos emplear `NOT NULL` para indicar que no se permite la introducción de valores nulos en una columna en concreto.
-- Empleamos `UNIQUE` para indicar que no queremos que se repitan los valores de una columna.
-- El bloque de código empleado para crear la tabla siempre tiene que acabar en ;.
+- **Para crear tablas empleamos la cláusula compuesta `CREATE TABLE`, seguida del nombre de la tabla.**
+- **Una tabla se compone de columnas (atributos) y tuplas de información relacionada con los atributos. Para diferenciar las tuplas unas de otras**
+**empleamos las claves primarias y éstas las podemos declarar con el identificador `PRIMARY KEY` después de la declaración del dominio o después de la declaración de atributos, a modo de restricción.**
+- **Podemos emplear `NOT NULL` para indicar que no se permite la introducción de valores nulos en una columna en concreto.**
+- **Empleamos `UNIQUE` para indicar que no queremos que se repitan los valores de una columna.**
+- **Separamos los distintos atributos mediante comas.**
+- **El bloque de código empleado para crear la tabla siempre tiene que acabar en ;.**
 
-### Dominios
+---
+
+## **`CREATE DOMAIN`**
 
 **Los dominios indican el tipo de datos que queremos emplear para un atributo. El tipo de datos condicionará los posibles valores que una columna podrá tomar.**
 **Algunos de los tipos de datos existentes en MariaDB son los siguientes:**
 
 NUMÉRICOS |
 --------- |
-**INT** (INTEGER) (número entero. Cuando está asignado va desde -2147483648 hasta 2147483647. Cuando no lo está va desde 0 hasta 4294967295) - https://mariadb.com/kb/en/int/|
-**BIGINT** (número entero largo. Cuando está asignado va desde -9223372036854775808 hasta 9223372036854775807. Cuando no lo está va desde 0 hasta 18446744073709551615) - https://mariadb.com/kb/en/bigint/|
-**DECIMAL** (valor decimal. Permite como máximo 65 dígitos en la parte entera y 38 en la mantisa. Si se especifica UNSIGNED no se permitirán los valores negativos) - https://mariadb.com/kb/en/decimal/|
-**FLOAT** (valores de coma flotante. Sus valores pueden ser desde -3.402823466E+38 hasta -1.175494351E-38, 0 y desde 1.175494351E-38 hasta 3.402823466E+38) - https://mariadb.com/kb/en/float/|
-**DOUBLE** (valores de coma flotante de doble precisión. Sus valores pueden ser desde -1.7976931348623157E+308 hasta -2.2250738585072014E-308, 0 y desde 2.2250738585072014E-308 hasta 1.7976931348623157E+308) - https://mariadb.com/kb/en/double/|
+**INT(M):** (INTEGER) número entero. Cuando está asignado va desde -2147483648 hasta 2147483647. Cuando no lo está va desde 0 hasta 4294967295. https://mariadb.com/kb/en/int/|
+**BOOLEAN:** valores booleanos (verdadero o falso - true or false). 0 se considera falso y cualquier otro valor es verdadero. https://mariadb.com/kb/en/boolean/|
+**BIGINT(M):** número entero largo. Cuando está asignado va desde -9223372036854775808 hasta 9223372036854775807. Cuando no lo está va desde 0 hasta 18446744073709551615. https://mariadb.com/kb/en/bigint/|
+**DECIMAL(M[, D]):** valor decimal. Permite como máximo 65 dígitos en la parte entera y 38 en la mantisa. Si se especifica UNSIGNED no se permitirán los valores negativos. https://mariadb.com/kb/en/decimal/|
+**FLOAT(M,D):** valores de coma flotante. Sus valores pueden ser desde -3.402823466E+38 hasta -1.175494351E-38, 0 y desde 1.175494351E-38 hasta 3.402823466E+38. https://mariadb.com/kb/en/float/|
+**DOUBLE(M,D):** (valores de coma flotante de doble precisión. Sus valores pueden ser desde -1.7976931348623157E+308 hasta -2.2250738585072014E-308, 0 y desde 2.2250738585072014E-308 hasta 1.7976931348623157E+308. https://mariadb.com/kb/en/double/|
 
 ---
 
  CADENAS-CARACTERES|
  ------------------|
- **VARCHAR**
+**STRING:** cadenas de caracteres. Pueden ir entre comillas simples o dobles y permiten las [secuencias de escape](./img/secuencias_escape.png). https://mariadb.com/kb/en/string-literals/|
+**CHAR(M):** cadenas de caracteres de longitud fija: 0 a 255 caracteres. https://mariadb.com/kb/en/char/|
+**VARCHAR(M):** cadenas de longitud variable. Permite cadenas desde 0 a 65532 caracteres. https://mariadb.com/kb/en/varchar/|
+**MEDIUMTEXT:** cadenas de hasta 16,777,215 caracteres. https://mariadb.com/kb/en/mediumtext/|
+**LONGTEXT:** cadenas de hasta 4,294,967,295 caracteres. https://mariadb.com/kb/en/longtext/|
+
+---
+
+FECHA-HORA|
+----------|
+**DATE:** fechas. Los valores siguen el formato "YYYY-MM-DD". https://mariadb.com/kb/en/date/|
+**TIME:** horas, minutos y segundos. Permite especificar la hora siguiendo el formato "HH:MM:SS.ssssss". https://mariadb.com/kb/en/time/|
+**DATETIME:** unión de los formatos para fecha y hora. Sigue el formato "YYYY-MM-DD HH:MM:SS.ffffff". https://mariadb.com/kb/en/datetime/|
+**TIMESTAMP:** igual que DATETIME. Se suele utilizar para guardar un registro de las inserciones y actualizaciones de datos. https://mariadb.com/kb/en/timestamp/|
+
+---
+
+OTROS|
+-----|
+**NULL:** valor desconocido. No es un valor cero o vacío.|
+**AUTO_INCREMENT:** cada vez que se introducen nuevos datos y al tener este dominio una columna en concreto, sus valores irán en aumento. Suele utilizarse para claves primarias. https://mariadb.com/kb/en/auto_increment/|
+
+- **Hay que tener en cuenta que los tipos de datos pueden variar según el sistema gestor que empleemos.**
+- **[Más información sobre tipos de datos](https://www.tutorialcup.com/dbms/datatypes-variables.htm)**
+- **[Más información sobre tipos de datos en MariaDB](https://mariadb.com/kb/en/data-types/)**
+
+---
+
+**La manera más eficiente de controlar los dominios en las BBDD es declarándolos por adelantado y luego llamándolos desde las tablas. Ésto lo hacemos empleando la siguiente fórmula:**
+
+```SQL
+CREATE DOMAIN [NOMBRE_DOMINIO] [DOMINIO];
+```
+
+---
+
