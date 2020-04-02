@@ -10,6 +10,8 @@ Cláusula | Acción
 **`TRUNCATE`** | Elimina los datos de una tabla, pero no la tabla en sí.
 **`RENAME`** | Nos permite renombrar una tabla.
 
+* [Más información sobre DDL en MariaDB](https://mariadb.com/kb/en/data-definition/)
+
 ## **`CREATE DATABASE | SCHEMA`**
 
 ### Fórmula `CREATE DATABASE | SCHEMA`
@@ -160,16 +162,16 @@ El modelo relacional está compuesto de restricciones, reglas que impiden la ent
 - **Unicidad:** indica que los valores de un atributo no se pueden repetir. **`UNIQUE`**
 - **Obligatoriedad:** indica que un atributo no admite valores nulos. **`NOT NULL`**
 - **Verificación:** a la hora de hacer una operación de actualización comprueba si se cumplen las condiciones de un predicado en concreto, y si no se cumplen se rechaza la operación. **`CHECK`**
-- **Clave ajena:** esta es una restricción inherente al modelo relacinal que definirá las reglas a seguir al refenciar las claves entre las relaciones de entidades: si una entidad E2 tiene un atributo que es una clave primaria de una entidad E1, el valor de dicho atributo debe concordar con el valor de la clave primaria referenciada de E1 o ser nulo.
+- **Clave ajena:** esta es una restricción inherente al modelo relacional que definirá las reglas a seguir al refenciar las claves entre las relaciones de entidades: si una entidad E2 tiene un atributo que es una clave primaria de una entidad E1, el valor de dicho atributo debe concordar con el valor de la clave primaria referenciada de E1 o ser nulo.
 
 A la hora de definir una clave ajena debemos tener en cuenta las consecuencias de las operaciones (borrado y modificación) sobre la tupla de la entidad que contiene la clave que referenciamos.
 Podemos definir las acciones que se llevarán a cabo en caso de que, por ejemplo, se elimine la tupla en concreto que contiene una clave que estamos referenciando desde una entidad E2.
 Estas operaciones son las siguientes:
 
-- **NO ACTION:** el borrado (o la modificación) de una tupla que contiene una clave primaria que estamos referenciando desde otra/s entidad/es no provocará la eliminación de datos en la/s entidad/es que referencia/n.
-- **CASCADE:** el borrado (o la modificación) de una tupla que contiene una clave primaria que estamos referenciando desde otra/s entidad/es provocará el borrado en cascada de las tuplas que contienen la clave referenciada.
-- **SET NULL:** el borrado (o la modificación) de una tupla que contiene una clave primaria que estamos referenciando desde otra/s entidad/es provocará el cambio a valores nulos de todas las tuplas que contienen la clave ajena.
-- **SET DEFAULT:** el borrado (o la modificación) de una tupla que contiene una clave primaria que estamos referenciando desde otra/s entidad/es provocará el cambio a valores por defecto (que previamente hemos definido) en todas las tuplas que contienen la clave ajena.
+- **`NO ACTION`:** el borrado (o la modificación) de una tupla que contiene una clave primaria que estamos referenciando desde otra/s entidad/es no provocará la eliminación de datos en la/s entidad/es que referencia/n.
+- **`CASCADE`:** el borrado (o la modificación) de una tupla que contiene una clave primaria que estamos referenciando desde otra/s entidad/es provocará el borrado en cascada de las tuplas que contienen la clave referenciada.
+- **`SET NULL`:** el borrado (o la modificación) de una tupla que contiene una clave primaria que estamos referenciando desde otra/s entidad/es provocará el cambio a valores nulos de todas las tuplas que contienen la clave ajena.
+- **`SET DEFAULT`:** el borrado (o la modificación) de una tupla que contiene una clave primaria que estamos referenciando desde otra/s entidad/es provocará el cambio a valores por defecto (que previamente hemos definido) en todas las tuplas que contienen la clave ajena.
 
 Ejemplos:
 
@@ -235,4 +237,95 @@ NOT DEFERRABLE: cada tupla es comprobada en el momento de la inserción/actualiz
 MÁS INFORMACIÓN SOBRE (NOT)DEFERRABLE: https://stackoverflow.com/questions/5300307/not-deferrable-versus-deferrable-initially-immediate#5300418
 */
 );
+```
+
+---
+
+## `ALTER`
+
+**`ALTER`** nos permite alterar las tablas y sus restricciones. Podemos añadir **(ADD)** o eliminar **(DROP)** columnas o restricciones.
+
+### Fórmula de `ALTER`
+
+```SQL
+ALTER TABLE <Nombre_Tabla> ADD COLUMN <atributo1> <dominio1> [NOT NULL] [DEFAULT <x>]
+                           DROP COLUMN <atributo1> [CASCADE | RESTRICT]
+                           ADD <restricción>
+                           DROP <restricción>
+                           MODIFY COLUMN <dominio1>;
+
+/*
+- DROP [column] <atributon> CASCADE -> Borra la columna que indicamos y todas las demás que hacen referencia a algún atributo suyo.
+- DROP [column] <atributon> RESTRICT -> Borra la columna que indicamos sin afectar a las demás que hacen referencia a algún atributo suyo.
+*/
+```
+
+Ejemplo:
+
+```SQL
+CREATE DOMAIN Tipo_Entero INT(4);
+CREATE DOMAIN Nombre_Valido VARCHAR(20);
+CREATE DOMAIN Apellido_Valido VARCHAR(50);
+
+CREATE TABLE Alumno (
+    id Tipo_Entero PRIMARY KEY,
+    nombre Nombre_Valido NOT NULL,
+    apellidos Apellido_Valido,
+    fecha_nacimiento DATE,
+    edad INTEGER NOT NULL
+);
+
+ALTER TABLE Alumno ADD Curso_Actual Nombre_Valido NOT NULL; -- Añade el atributo Curso_Actual, con el dominio Nombre_Valido, sin valores nulos y ésto a la tabla Alumno.
+ALTER TABLE Alumno ADD CONSTRAINT Comprobar_Edad_Válida CHECK (edad BETWEEN 13 AND 18); -- Añade la restricción 'Comprobar_Edad_Válida', que comprobará si la edad introducida está comprendida entre 13 y 18.
+ALTER TABLE Alumno ADD CONSTRAINT Comprobar_Curso_Válido CHECK (Curso_Actual IN ('ASIR1', 'DAM1', 'SMR1')); -- Añade la restricción Comprobar_Curso_Válido, que comprobará si el curso actual del alumno está entre la lista dada ('ASIR1', 'DAM1' o 'SMR1').
+ALTER TABLE Alumno DROP COLUMN edad; -- Elimina la columna edad.
+```
+
+## `DROP`
+
+**`DROP`** nos permite eliminar una tabla o una base de datos al completo.
+
+### Fórmula de `DROP`:
+
+```SQL
+DROP TABLE [IF EXISTS] <Nombre_Tabla> [CASCADE | RESTRICT];
+DROP (DATABASE | SCHEMA) [IF EXISTS] <Nombre_BBDD> [CASCADE | RESTRICT];
+
+-- RESTRICT comprueba antes del borrado si la tabla o la BBDD está vacía.
+-- CASCADE lo elimina todo, sin contemplaciones.
+```
+
+Ejemplo:
+
+```SQL
+DROP TABLE Alumno CASCADE; -- Elimina toda la tabla Alumno.
+```
+
+## `TRUNCATE`
+
+**`TRUNCATE`** nos sirve para eliminar el contenido de la tabla, pero no su estructura.
+
+### Fórmula de `TRUNCATE`:
+
+```SQL
+TRUNCATE TABLE Nombre_Tabla;
+
+-- En MariaDB TRUNCATE elimina el contenido y recrea la tabla, lo que es más rápido que DELETE (clásula de DML), que elimina una a una las tuplas de la tabla.
+
+```
+
+## `RENAME`
+
+**`RENAME`** nos sirve para renombrar una tabla.
+
+### Fórmula de `RENAME`:
+
+```SQL
+RENAME TABLE Nombre_Tabla TO Nuevo_Nombre_Tabla [, Nombre_Tabla_2 TO Nuevo_Nombre_Tabla_2];
+```
+
+Ejemplo:
+
+```SQL
+RENAME TABLE Profesor TO Docente;
 ```
