@@ -14,5 +14,5 @@ Un profesor pode participar en varios proxectos. En cada proxecto incorpórase n
 
 ## Esquema Entidad-Relación
 
-![Imagen del esquema E-D](.img/PROY-INVESTIGACION.png)
+![Imagen del esquema E-D](img/PROY-INVESTIGACION.png)
 
