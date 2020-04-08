@@ -18,16 +18,17 @@ Un profesor pode participar en varios proxectos. En cada proxecto incorpórase n
 
 ## Normalización
 
-### 1º Forma normal: Una relación está en 1FN si cada atributo toma un solo valor del dominio al que pertenece.
+**1º Forma normal: Una relación está en 1FN si cada atributo toma un solo valor del dominio al que pertenece.**
 
 ![Imagen 1FN](img/P_FN.png)
 
-**- [x] La relación está en primera forma normal al no haber atributos repetidos o con una misma semántica en la BBDD.**
+**:white_check_mark: La relación está en primera forma normal al no haber atributos repetidos o con una misma semántica en la BBDD.**
 
-### 2º Forma normal: Una relación está en 2FN si está en 1FN y si todos los atributos no clave dependen por completo de la clave principal.
+**2º Forma normal: Una relación está en 2FN si está en 1FN y si todos los atributos no clave dependen por completo de la clave principal.**
 
 ![Imagen 2FN](img/S_FN.png)
 
 **- Una sede no depende de uno de sus departamentos para saber su ubicación, más bien sería al revés. La relación no cumple con la segunda forma normal, por lo que procedemos a crear otra relación que represente la ubicación de un departamento: queremos saber dónde se ubica un departamento (primero debemos saber el nombre del departamento que queremos) y en qué sede en concreto, por lo que creamos una relación llamada Ubicación, que contendrá el nombre del departamento y el nombre de la sede.**
-**- [x] Todos los atributos dependen funcionalmente de la clave principal al completo. Se cumple la 2FN.**
+
+**:white_check_mark: Todos los atributos dependen funcionalmente de la clave principal al completo. Se cumple la 2FN.**
 
