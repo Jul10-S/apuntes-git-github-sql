@@ -25,7 +25,7 @@ CREATE (DATABASE | SCHEMA) [IF-NOT-EXISTS] nombreDB [CHARACTER SET = NOMBRE_CHAR
 Ejemplo en MariaDB:
 
 ```SQL
-CREATE DATABASE My_Database CHARACTER SET = utf8mb4 COLLATE = utf8_spanish_ci;
+CREATE DATABASE My_Database CHARACTER SET = utf8 COLLATE = utf8_general_ci;
 ```
 
 - Crea la BBDD 'My_Database' siempre y cuando no exista.
@@ -96,6 +96,18 @@ CREATE TABLE Alumno (
 ```SQL
 CREATE DOMAIN [NOMBRE_DOMINIO] [DOMINIO];
 ```
+
+---
+
+:warning: **Ni MySQL ni MariaDB tienen una implementación de `CREATE DOMAIN`. Ésta clásula solo la encontramos, por ejemplo, en PostgreSQL.**
+
+**- [Cuestión en Stackoverflow](https://dba.stackexchange.com/questions/121471/creating-a-domain-in-mysql-or-mariadb)**
+
+**- [Petición de la implementación aún sin resolver](https://jira.mariadb.org/browse/MDEV-16377)**
+
+**- [CREATE DOMAIN en PostgreSQL](https://www.postgresql.org/docs/current/sql-createdomain.html)**
+
+---
 
 Ejemplo:
 
