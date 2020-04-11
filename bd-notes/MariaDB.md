@@ -15,12 +15,12 @@ Por defecto Debian tiene a MariaDB en sus [repositorios](https://packages.debian
 Lo primero que debemos hacer antes de instalar cualquier programa en una distribución es actualizar la lista de repositorios, que contienen la útlima versión estable de éstos, y asegurarnos
 de que tenemos el sistema actualizado para evitar algún conflicto de versiones entre librerías y demás paquetes. Para actualizar la lista de repositorios y el sistema ejecutamos en una terminal:
 
-```bash
+```sh
 sudo apt update; sudo apt dist-upgrade -y
 ```
 
 Una vez hemos hecho esto procedemos a instalar MariaDB ejecutando la siguiente instrucción: 
-```bash
+```sh
 sudo apt install mariadb-server -y
 ```
 
@@ -29,7 +29,7 @@ Podemos ver todos los paquetes que tenemos disponibles desde los repositorios es
 ![Paquetes relacionados con MariaDB y que están disponibles para instalación](./img/00-PAQS-DISP.png)
 
 Lo siguiente es iniciar el servicio y activarlo para que se autoinicie cuando se inicie sesión. Ejecutamos:
-```bash
+```sh
 sudo systemctl start mariadb
 
 # Si el servicio no está activado ejecutamos `sudo systemctl enable mariadb`
@@ -37,15 +37,17 @@ sudo systemctl start mariadb
 
 Una vez iniciado vemos el estado para comprobar que no hubo ningún problema:
 
-```bash
+```sh
 sudo systemctl status mariadb
 ```
 
 ![Inicio y activación del servicio](img/01-INIT.png)
 
+
 :warning: En sistemas basados en SysVinit el inicio y activado del servicio se realiza ejecutando los siguientes comandos:
 
-```bash
+
+```sh
 sudo service mysql start; chkconfig --level 35 mysql on
 
 # Para saber qué administrador de servicios utiliza nuestro sistema ejecutamos: `pstree -p`. El primer proceso en iniciarse es el del administrador.
@@ -56,7 +58,7 @@ sudo service mysql start; chkconfig --level 35 mysql on
 Una vez instalado e iniciado el servicio sólo nos queda configurarlo mínimamente para que sea más seguro. Esto lo hacemos con un script que viene por defecto 
 con la instalación: `mysql_secure_installation`.
 
-```bash
+```sh
 sudo mysql_secure_installation
 ```
 
@@ -79,7 +81,7 @@ Finalmente nos pide confirmación para guardar los cambios hechos:
 
 Ahora que ya tenemos el gestor mínimamente configurado, procederemos a conectarnos. Ejecutamos:
 
-```bash
+```sh
 sudo mysql -u root -p
 ```
 

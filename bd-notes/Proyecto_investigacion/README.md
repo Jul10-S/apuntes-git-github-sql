@@ -251,3 +251,7 @@ ALTER TABLE Financiación ADD CONSTRAINT Unicidad_Asociado UNIQUE(Número_Asocia
 
 ![FK Nombre_Programa y unicidad Número_Asociado](img/6-ALTER.png)
 
+---
+
+- [Gist con el código completo modificado](https://gist.github.com/Jul10-S/132d8fba1c4cad887d45dbbcce9a501a)
+

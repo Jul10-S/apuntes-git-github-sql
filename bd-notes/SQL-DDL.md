@@ -101,11 +101,11 @@ CREATE DOMAIN [NOMBRE_DOMINIO] [DOMINIO];
 
 :warning: **Ni MySQL ni MariaDB tienen una implementación de `CREATE DOMAIN`. Ésta clásula solo la encontramos, por ejemplo, en PostgreSQL.**
 
-**- [Cuestión en Stackoverflow](https://dba.stackexchange.com/questions/121471/creating-a-domain-in-mysql-or-mariadb)**
+- **[Cuestión en StackOverflow](https://dba.stackexchange.com/questions/121471/creating-a-domain-in-mysql-or-mariadb)**
 
-**- [Petición de la implementación aún sin resolver](https://jira.mariadb.org/browse/MDEV-16377)**
+- **[Petición de la implementación aún sin resolver](https://jira.mariadb.org/browse/MDEV-16377)**
 
-**- [CREATE DOMAIN en PostgreSQL](https://www.postgresql.org/docs/current/sql-createdomain.html)**
+- **[CREATE DOMAIN en PostgreSQL](https://www.postgresql.org/docs/current/sql-createdomain.html)**
 
 ---
 

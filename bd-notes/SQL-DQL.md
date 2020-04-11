@@ -14,9 +14,9 @@ Estos sublenguajes son:
 
 - **`DQL (Data Query Language)`**: Este sublenguaje se encarga de las consultas de los usuarios (obtener las columnas -atributos- de una tabla, obtener tuplas con información de una columna o la tabla al completo...).
   - **`SELECT`**
-- **`DML (Data Manipulation Language)`**: Este sublenguaje se encarga de manipular los datos de la base de datos. Permite, por ejemplo, insertar nuevos datos en una columna.
+- **[`DML (Data Manipulation Language)`](./SQL-DML.md)**: Este sublenguaje se encarga de manipular los datos de la base de datos. Permite, por ejemplo, insertar nuevos datos en una columna.
   - **`INSERT, UPDATE, DELETE` -> En versiones anteriores de SQL incluía `SELECT`**
-- **`DDL (Data Definition Language)`**: Este sublenguaje nos permite definir las características u objetos de la base de datos. Podemos, por ejemplo, crear o eliminar tablas.
+- **[`DDL (Data Definition Language)`](./SQL-DDL.md)**: Este sublenguaje nos permite definir las características u objetos de la base de datos. Podemos, por ejemplo, crear o eliminar tablas.
   - **`CREATE, ALTER, DROP, TRUNCATE, RENAME`**
 - **`DCL (Data Control Language)`**: Permite definir controles de seguridad sobre datos u objetos de la base de datos. Con este sublenguaje se puede dar o revocar permisos a los usuarios para que puedan o no acceder a ciertos datos o realizar alguna operación.
   - **`GRANT, REVOKE`**
@@ -400,7 +400,7 @@ WHERE continent = 'Europe';
 ```
 
 Para detallar aún más nuestra subconsulta disponemos de la cláusula **`ALL`**, que nos permite comprobar
-de una sentada los valores de la subconsulta que cumplen una condición.
+de una sentada los valores de la subconsulta que cumplen una condición:
 
 ```SQL
 SELECT name
