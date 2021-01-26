@@ -1,4 +1,6 @@
-# Primeros pasos con git y github. Apuntes de SQL
+# Primeros pasos con git y github.
+
+> **Apuntes hechos por @davidgchaves**
 
 ## Índice
 
